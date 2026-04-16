@@ -1,13 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Task 13.1</title>
+    <title>Todo App</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            width: 250px;
+        }
+
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>LocalStorage Basics</h1>
+    <h1>Todo App</h1>
 
-    <script src="task13-1.js"></script>
+    <input id="todoInput" placeholder="Enter a task">
+    <button id="addBtn">Add</button>
+
+    <ul id="todoList"></ul>
+
+    <script src="task13-2.js"></script>
 
 </body>
 </html>
