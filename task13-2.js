@@ -2,36 +2,67 @@ const input = document.getElementById("todoInput");
 const button = document.getElementById("addBtn");
 const list = document.getElementById("todoList");
 
-// STATE (important)
-let todos = [];
+const STORAGE_KEY = "todos";
 
-// Add todo
+// Load initial state
+let todos = loadTodos();
+
+// ---------- STORAGE HELPERS ----------
+function saveTodos() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+}
+
+function loadTodos() {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+}
+
+// ---------- ADD TODO ----------
 button.addEventListener("click", () => {
     const text = input.value.trim();
-
     if (!text) return;
 
     const newTodo = {
         id: Date.now(),
-        text: text,
+        text,
         completed: false
     };
 
     todos.push(newTodo);
 
+    saveTodos();
     renderTodos();
 
     input.value = "";
 });
 
-// Render function (VERY IMPORTANT)
+// ---------- TOGGLE TODO ----------
+function toggleTodo(id) {
+    todos = todos.map(todo =>
+        todo.id === id
+            ? { ...todo, completed: !todo.completed }
+            : todo
+    );
+
+    saveTodos();
+    renderTodos();
+}
+
+// ---------- DELETE TODO ----------
+function deleteTodo(id) {
+    todos = todos.filter(todo => todo.id !== id);
+
+    saveTodos();
+    renderTodos();
+}
+
+// ---------- RENDER ----------
 function renderTodos() {
     list.innerHTML = "";
 
     todos.forEach(todo => {
         const li = document.createElement("li");
 
-        // Text
         const span = document.createElement("span");
         span.textContent = todo.text;
 
@@ -39,18 +70,11 @@ function renderTodos() {
             span.style.textDecoration = "line-through";
         }
 
-        // Toggle when clicking text
-        span.addEventListener("click", () => {
-            toggleTodo(todo.id);
-        });
+        span.addEventListener("click", () => toggleTodo(todo.id));
 
-        // Delete button
         const deleteBtn = document.createElement("button");
         deleteBtn.textContent = "❌";
-
-        deleteBtn.addEventListener("click", () => {
-            deleteTodo(todo.id);
-        });
+        deleteBtn.addEventListener("click", () => deleteTodo(todo.id));
 
         li.appendChild(span);
         li.appendChild(deleteBtn);
@@ -58,7 +82,6 @@ function renderTodos() {
         list.appendChild(li);
     });
 }
-function deleteTodo(id) {
-    todos = todos.filter(todo => todo.id !== id);
-    renderTodos();
-}
+
+// ---------- INIT ----------
+renderTodos();
