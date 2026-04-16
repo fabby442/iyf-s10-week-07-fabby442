@@ -31,28 +31,34 @@ function renderTodos() {
     todos.forEach(todo => {
         const li = document.createElement("li");
 
-        // Style if completed
-        li.textContent = todo.text;
+        // Text
+        const span = document.createElement("span");
+        span.textContent = todo.text;
+
         if (todo.completed) {
-            li.style.textDecoration = "line-through";
+            span.style.textDecoration = "line-through";
         }
 
-        // Toggle on click
-        li.addEventListener("click", () => {
+        // Toggle when clicking text
+        span.addEventListener("click", () => {
             toggleTodo(todo.id);
         });
+
+        // Delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "❌";
+
+        deleteBtn.addEventListener("click", () => {
+            deleteTodo(todo.id);
+        });
+
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
 
         list.appendChild(li);
     });
 }
-
-// Toggle function
-function toggleTodo(id) {
-    todos = todos.map(todo =>
-        todo.id === id
-            ? { ...todo, completed: !todo.completed }
-            : todo
-    );
-
+function deleteTodo(id) {
+    todos = todos.filter(todo => todo.id !== id);
     renderTodos();
 }
