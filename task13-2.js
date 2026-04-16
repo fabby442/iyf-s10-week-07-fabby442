@@ -30,7 +30,29 @@ function renderTodos() {
 
     todos.forEach(todo => {
         const li = document.createElement("li");
+
+        // Style if completed
         li.textContent = todo.text;
+        if (todo.completed) {
+            li.style.textDecoration = "line-through";
+        }
+
+        // Toggle on click
+        li.addEventListener("click", () => {
+            toggleTodo(todo.id);
+        });
+
         list.appendChild(li);
     });
+}
+
+// Toggle function
+function toggleTodo(id) {
+    todos = todos.map(todo =>
+        todo.id === id
+            ? { ...todo, completed: !todo.completed }
+            : todo
+    );
+
+    renderTodos();
 }
