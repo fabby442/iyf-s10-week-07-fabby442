@@ -1,29 +1,36 @@
-// Store a value
-localStorage.setItem("username", "Fabby");
-
-// Retrieve it
-const username = localStorage.getItem("username");
-console.log("Username:", username);
-
-// Check if it exists
-if (localStorage.getItem("username")) {
-    console.log("User exists");
+// Save data
+function saveToStorage(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
 }
-// Create object
-const user = {
-    name: "Fabby",
-    age: 22,
-    hobbies: ["coding", "gaming"]
-};
 
-// Convert to string before saving
-localStorage.setItem("user", JSON.stringify(user));
+// Get data
+function getFromStorage(key, defaultValue = null) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultValue;
+}
 
-// Get from storage
-const storedUser = localStorage.getItem("user");
+// Remove data
+function removeFromStorage(key) {
+    localStorage.removeItem(key);
+}
 
-// Convert back to object
-const parsedUser = JSON.parse(storedUser);
+// -------------------
+// TESTING THE FUNCTIONS
+// -------------------
 
-console.log(parsedUser);
-console.log(parsedUser.name);
+// Save
+saveToStorage("settings", {
+    theme: "dark",
+    fontSize: 16
+});
+
+// Get
+const settings = getFromStorage("settings", {
+    theme: "light",
+    fontSize: 14
+});
+
+console.log(settings);
+
+// Remove (optional test)
+// removeFromStorage("settings");
